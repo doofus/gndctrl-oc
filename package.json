@@ -1,0 +1,12 @@
+{
+  "name": "gndctrl-oc",
+  "version": "0.1.0",
+  "description": "2D browser-based ground traffic control simulator",
+  "scripts": {
+    "start": "npx serve . -l 8080",
+    "test": "node test/tests.js",
+    "lint": "node test/lint.js"
+  },
+  "author": "",
+  "license": "MIT"
+}

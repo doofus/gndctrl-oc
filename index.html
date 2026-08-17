@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GroundCtrl</title>
+    <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+    <div id="app">
+        <header id="header">
+            <div id="airport-name">
+                <select id="airport-select" title="Select Airport">
+                    <option value="KSEA">Seattle (KSEA)</option>
+                    <option value="KSFO">San Francisco (KSFO)</option>
+                </select>
+            </div>
+            <div id="sim-time" style="font-size:12px;color:#8899aa;margin-left:16px;">00:00</div>
+            <div id="speed-control">
+                <button id="btn-pause" class="control-btn">⏸</button>
+                <button id="btn-1x" class="control-btn active">1x</button>
+                <button id="btn-2x" class="control-btn">2x</button>
+                <button id="btn-5x" class="control-btn">5x</button>
+            </div>
+        </header>
+
+        <main id="main">
+            <div id="map-container">
+                <canvas id="map-canvas"></canvas>
+            </div>
+            <aside id="side-panel">
+                <section id="strip-list">
+                    <h2 class="section-title">Aircraft</h2>
+                    <div id="strips"></div>
+                </section>
+                <section id="command-panel">
+                    <h2 class="section-title">Commands</h2>
+                    <div id="command-inputs"></div>
+                </section>
+            </aside>
+        </main>
+
+        <footer id="footer">
+            <div id="status-bar"></div>
+        </footer>
+    </div>
+
+    <!-- Engine -->
+    <script src="src/util/math.js"></script>
+    <script src="src/util/dijkstra.js"></script>
+    <script src="src/util/event-bus.js"></script>
+
+    <!-- Game Engine -->
+    <script src="src/engine/game-engine.js"></script>
+    <script src="src/engine/clock.js"></script>
+
+    <!-- Simulation -->
+    <script src="src/sim/aircraft.js"></script>
+    <script src="src/sim/airport.js"></script>
+    <script src="src/sim/taxiway-graph.js"></script>
+    <script src="src/sim/command-handler.js"></script>
+
+    <!-- Rendering -->
+    <script src="src/render/renderer.js"></script>
+    <script src="src/render/map-view.js"></script>
+
+    <!-- UI -->
+    <script src="src/ui/ui-controller.js"></script>
+    <script src="src/ui/strip-view.js"></script>
+
+    <!-- Data -->
+    <script src="src/airports/ksea.js"></script>
+    <script src="src/airports/ksfo.js"></script>
+    <script src="src/airports/metadata.js"></script>
+
+    <!-- Main -->
+    <script src="src/app.js"></script>
+</body>
+</html>
