@@ -163,7 +163,7 @@ class GameEngine {
         // Find clicked aircraft
         const clicked = this.aircraftList.find(ac => {
             if (!ac.isVisible()) return false;
-            const screenPos = this.mapView.worldToScreen(ac.position);
+            const screenPos = this.mapView.worldToScreen(ac.position.lat, ac.position.lng);
             const dx = screenPos.x - x;
             const dy = screenPos.y - y;
             const dist = Math.sqrt(dx * dx + dy * dy);
@@ -231,6 +231,15 @@ class GameEngine {
     resize() {
         this.canvas.width = this.canvas.offsetWidth;
         this.canvas.height = this.canvas.offsetHeight;
+        this.mapView.setCanvasDimensions(this.canvas.width, this.canvas.height);
+        if (this.airport) {
+            this.mapView.setCenter(
+                this.airport.position.lat,
+                this.airport.position.lng,
+                this.airport.zoom,
+                this.airport
+            );
+        }
         this._render();
     }
 
@@ -241,6 +250,7 @@ class GameEngine {
             console.error(`Airport ${airportId} not found`);
             return;
         }
+        window._airportData = airportData;
         this.airport = airportData;
         this._initAirportGraph();
         this.aircraftList = [];

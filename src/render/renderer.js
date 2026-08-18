@@ -29,7 +29,7 @@ class Renderer {
     }
 
     _drawAircraft(aircraft, ctx) {
-        const screenPos = MapView.instance.worldToScreen(aircraft.position);
+        const screenPos = MapView.instance.worldToScreen(aircraft.position.lat, aircraft.position.lng);
         const heading = aircraft.heading || 0;
         const scale = aircraft.scale || 1;
 

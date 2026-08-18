@@ -13,17 +13,46 @@ class MapView {
         MapView.instance = this;
     }
 
-    /** Set the map center to an airport */
-    setCenter(lat, lng, zoom) {
+    /** Set the map center to an airport, with optional auto-fit to bounds */
+    setCenter(lat, lng, zoom, airport) {
         this.center = { lat, lng };
         this.zoom = zoom;
-        this.pixelsPerDegree = this._calculatePixelsPerDegree(zoom);
+        if (airport && airport.taxiNodes) {
+            this.pixelsPerDegree = this._calculateFitScale(airport);
+        } else {
+            this.pixelsPerDegree = this._calculatePixelsPerDegree(zoom);
+        }
+    }
+
+    /** Auto-fit all airport taxi nodes onto the canvas with 10% margin */
+    _calculateFitScale(airport) {
+        const nodes = airport.taxiNodes;
+        let minLat = Infinity, maxLat = -Infinity;
+        let minLng = Infinity, maxLng = -Infinity;
+
+        for (const id in nodes) {
+            const n = nodes[id];
+            minLat = Math.min(minLat, n.lat);
+            maxLat = Math.max(maxLat, n.lat);
+            minLng = Math.min(minLng, n.lng);
+            maxLng = Math.max(maxLng, n.lng);
+        }
+
+        const latSpan = maxLat - minLat;
+        const lngSpan = maxLng - minLng;
+        const maxSpan = Math.max(latSpan, lngSpan) || 0.001;
+
+        // Fit with 15% margin on the smaller canvas dimension
+        const margin = 0.85;
+        const fitLat = (this.canvasHeight * margin) / latSpan;
+        const fitLng = (this.canvasWidth * margin) / lngSpan;
+
+        return Math.min(fitLat, fitLng);
     }
 
     _calculatePixelsPerDegree(zoom) {
-        // Base pixels per degree at zoom 1, scaled up
-        // At zoom 14, we want ~2000 px per degree (roughly)
-        const base = 100;
+        // Base: ~200 px/degree at zoom 1, doubles each level
+        const base = 200;
         return base * Math.pow(2, zoom - 1);
     }
 

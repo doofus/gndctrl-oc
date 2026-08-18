@@ -44,13 +44,20 @@ class App {
         // Link command handler
         this.engine.commandHandler = new CommandHandler();
 
-        // Set map center and zoom
+        // Ensure canvas has proper dimensions before setting center
+        const canvasW = this.canvas.offsetWidth;
+        const canvasH = this.canvas.offsetHeight;
+        this.canvas.width = canvasW;
+        this.canvas.height = canvasH;
+        this.engine.mapView.setCanvasDimensions(canvasW, canvasH);
+
+        // Set map center and zoom (auto-fit to airport bounds)
         this.engine.mapView.setCenter(
             this.airport.position.lat,
             this.airport.position.lng,
-            this.airport.zoom
+            this.airport.zoom,
+            this.airport
         );
-        this.engine.mapView.setCanvasDimensions(this.canvas.width, this.canvas.height);
 
         // Make UI globally accessible
         window.ui = this.ui;
@@ -75,13 +82,22 @@ class App {
                 this.canvas.height = displayHeight;
             }
             if (this.engine) {
-                this.engine.mapView.setCanvasDimensions(this.canvas.width, this.canvas.height);
+                this.engine.mapView.setCanvasDimensions(displayWidth, displayHeight);
+                // Recalculate fit scale since canvas size changed
+                if (this.airport) {
+                    this.engine.mapView.setCenter(
+                        this.airport.position.lat,
+                        this.airport.position.lng,
+                        this.airport.zoom,
+                        this.airport
+                    );
+                }
                 this.engine.resize();
             }
         };
 
         window.addEventListener('resize', resize);
-        setTimeout(resize, 100);
+        setTimeout(resize, 0);
     }
 
     _setupAirportSelector() {
