@@ -15,6 +15,10 @@ class Airport {
         this.taxiGraph = new TaxiwayGraph(data);
         this.gates = data.gates || {};
         this.runways = data.runways || {};
+        this.taxiNodes = data.taxiNodes || {};
+        this.taxiEdges = data.taxiEdges || {};
+        this.spawnPatterns = data.spawnPatterns || [];
+        this.aircraftTypes = data.aircraftTypes || {};
     }
 
     getTaxiGraph() {
